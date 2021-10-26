@@ -6,13 +6,19 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // get all products
 router.get('/', (req, res) => {
   // find all products
+  Product.findAll().then((productData) => {
+    res.json(productData);
+  }) 
   // be sure to include its associated Category and Tag data
 });
 
 // get one product
 router.get('/:id', (req, res) => {
   // find a single product by its `id`
+  Product.findByPk(req.params.id).then((productData) => {
+    res.json(productData);
   // be sure to include its associated Category and Tag data
+  });
 });
 
 // create new product
@@ -45,16 +51,29 @@ router.post('/', (req, res) => {
       console.log(err);
       res.status(400).json(err);
     });
-});
+
 
 // update product
 router.put('/:id', (req, res) => {
   // update product data
-  Product.update(req.body, {
-    where: {
-      id: req.params.id,
+  Product.update(
+    { // probably take out id since those don't get updated
+      id: req.body.id,
+      // do these have to be separated into individual options objects?
+      price: req.body.price,
+      stock: req.body.stock,
+      category_id: req.body.category_id,
     },
-  })
+    {
+      where: {
+        id: req.params.id,
+        // do these have to be in separated where objects?
+        price: req.params.price,
+        stock: req.params.stock,
+        category_id: req.params.category_id,
+      },
+    }
+  )
     .then((product) => {
       // find all associated tags from ProductTag
       return ProductTag.findAll({ where: { product_id: req.params.id } });
@@ -85,12 +104,23 @@ router.put('/:id', (req, res) => {
     .then((updatedProductTags) => res.json(updatedProductTags))
     .catch((err) => {
       // console.log(err);
+      console.log(err);
       res.status(400).json(err);
     });
 });
 
 router.delete('/:id', (req, res) => {
   // delete one product by its `id` value
+  Product.destroy({
+    where: {
+      id: req.params.id,
+    }
+  })
+  .then((deletedProduct) => {
+    res.json(deletedProduct);
+  })
+  .catch((err) => res.json(err))
+});
 });
 
 module.exports = router;
