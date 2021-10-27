@@ -6,10 +6,13 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // get all products
 router.get('/', (req, res) => {
   // find all products
-  Product.findAll().then((productData) => {
+  Product.findAll({
+    include: [{ model: Category }, { model: Tag}],
+  })
+  .then((productData) => {
     res.json(productData);
   }) 
-  // be sure to include its associated Category and Tag data
+  // be sure to include its associated Category and Tag data - see above
 });
 
 // get one product
@@ -31,7 +34,14 @@ router.post('/', (req, res) => {
       tagIds: [1, 2, 3, 4]
     }
   */
-  Product.create(req.body)
+  Product.create(
+    {
+      product_name: req.body.product_name,
+      price: req.body.price,
+      stock: req.body.stock,
+      // tagIds: or tag_id: ??
+    }
+   )
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
       if (req.body.tagIds.length) {
@@ -59,7 +69,7 @@ router.put('/:id', (req, res) => {
   Product.update(
     { // probably take out id since those don't get updated
       id: req.body.id,
-      // do these have to be separated into individual options objects?
+      product_name: req.body.product_name,
       price: req.body.price,
       stock: req.body.stock,
       category_id: req.body.category_id,
@@ -67,10 +77,6 @@ router.put('/:id', (req, res) => {
     {
       where: {
         id: req.params.id,
-        // do these have to be in separated where objects?
-        price: req.params.price,
-        stock: req.params.stock,
-        category_id: req.params.category_id,
       },
     }
   )

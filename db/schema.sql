@@ -14,6 +14,7 @@ CREATE TABLE category (
 
 CREATE TABLE product (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    product_name VARCHAR(30) NOT NULL,
     price DECIMAL NOT NULL, -- add how to validate the value is a decimal
     stock INT NOT NULL, -- set default value to ten and validate the value is numeric
     category_id INT,

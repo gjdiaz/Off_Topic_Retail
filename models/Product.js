@@ -16,16 +16,23 @@ Product.init(
       primaryKey: true,
       autoIncrement: true,
     },
+    product_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     price: {
       type: DataTypes.DECIMAL,
+      allowNull: false,
+      // validate value is a decimal here
     },
     stock: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 10,
+      // validate value is numeric here
     },
-    // kept underscore and not camel case to see what happens
     category_id: {
       type: DataTypes.INTEGER,
-      // create foreign key
       references: {
           model: 'category',
           key: 'id',
