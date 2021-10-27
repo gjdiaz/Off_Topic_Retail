@@ -1,6 +1,7 @@
 // import important parts of sequelize library
 const { Model, DataTypes } = require('sequelize');
-const { Category } = require('.');
+// the kine below was causing a circular independency
+// const { Category } = require('.');
 // import our database connection from config.js
 const sequelize = require('../config/connection');
 
@@ -24,6 +25,7 @@ Product.init(
       type: DataTypes.DECIMAL,
       allowNull: false,
       // validate value is a decimal here
+      // CHECK ...?
     },
     stock: {
       type: DataTypes.INTEGER,

@@ -26,7 +26,7 @@ CREATE TABLE tag (
     tag_name VARCHAR(30)
 );
 
-CREATE producttag (
+CREATE TABLE product_tag (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     product_id INT, 
     FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE SET NULL, -- references the Product model's id
