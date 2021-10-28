@@ -93,7 +93,7 @@ router.put('/:id', (req, res) => {
         .map((tag_id) => {
           return {
             product_id: req.params.id,
-            tag_id,
+            tag_id: req.params.tag_id
           };
         });
       // figure out which ones to remove
